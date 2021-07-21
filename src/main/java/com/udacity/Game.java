@@ -148,21 +148,32 @@ public class Game {
      * @param grid 2D array of characters representing the game board
      * @return String indicating the outcome of the game: "X wins" or "O wins" or "Tie" or "None"
      */
+
     public String checkGameWinner(char [][]grid){
+        int gridSize = grid.length;
         String result = "None";
         //Student code goes here ...
         //  loop columns to check for win
-        for(int i=0; i<3; i++){
-            char[] row = {grid[i][0], grid[i][1], grid[i][2]};
+        for(int i=0; i<gridSize; i++){
+            char[] col = {grid[i][0], grid[i][1], grid[i][2]};
+            // sort row
+            Arrays.sort(col);
+            // check if 1st and last are = and not '-'
+            if (col[0] == col[2] && !(col[0]=='-')){
+                result = Character.toUpperCase(col[0]) + " wins";
+            }
+        };
+        // check row
+        // TODO: DRY this u
+        for(int i=0; i<gridSize; i++){
+            char[] row = {grid[0][i], grid[1][i], grid[2][i]};
             // sort row
             Arrays.sort(row);
             // check if 1st and last are = and not '-'
             if (row[0] == row[2] && !(row[0]=='-')){
                 result = Character.toUpperCase(row[0]) + " wins";
             }
-
-        }
-
+        };
 
         return result;
     }
