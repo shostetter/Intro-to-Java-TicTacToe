@@ -94,9 +94,11 @@ public class Game {
 
     /**
      * Performs the winner chack and displayes a message if game is over
+     *
      * @return true if game is over to start a new game
      */
     public boolean doChecks() {
+        
         //check if there's a winner or tie ?
         String winnerMessage = checkGameWinner(grid);
         if (!winnerMessage.equals("None")) {
@@ -148,32 +150,60 @@ public class Game {
      * @param grid 2D array of characters representing the game board
      * @return String indicating the outcome of the game: "X wins" or "O wins" or "Tie" or "None"
      */
+    public char[] checkAxis(char [][]grid, int axis, int pos) {
+        char[] col;
+        if (axis == 0) {
+            col = new char[]{grid[pos][0], grid[pos][1], grid[pos][2]};
+        } else {
+            col = new char[]{grid[0][pos], grid[1][pos], grid[2][pos]};
+        }
+        Arrays.sort(col);
+        return col;
+    };
+
+    public boolean checkFull(char [][]grid){
+        // there should be a simpler way, but...
+        // check every cell for - if none left the board is full
+        int gridSize = grid.length;
+        int dashes = 0;
+        for(int i=0; i<gridSize; i++) {
+            for(int j= 0; j < gridSize; j++) {
+                if (grid[i][j] != '-') {
+                    dashes++;
+                }
+            }
+        }
+        if (dashes == 9){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public String checkGameWinner(char [][]grid){
         int gridSize = grid.length;
         String result = "None";
         //Student code goes here ...
-        //  loop columns to check for win
+
         for(int i=0; i<gridSize; i++){
-            char[] col = {grid[i][0], grid[i][1], grid[i][2]};
-            // sort row
-            Arrays.sort(col);
+            //check columns
+            char[] col = checkAxis(grid, 0, i);
             // check if 1st and last are = and not '-'
             if (col[0] == col[2] && !(col[0]=='-')){
-                result = Character.toUpperCase(col[0]) + " wins";
+                return Character.toUpperCase(col[0]) + " wins";
             }
-        };
-        // check row
-        // TODO: DRY this u
-        for(int i=0; i<gridSize; i++){
-            char[] row = {grid[0][i], grid[1][i], grid[2][i]};
-            // sort row
-            Arrays.sort(row);
+            //check rows
+            char[] row = checkAxis(grid, 1, i);
             // check if 1st and last are = and not '-'
-            if (row[0] == row[2] && !(row[0]=='-')){
-                result = Character.toUpperCase(row[0]) + " wins";
+            if (row[0] == row[2] && !(row[0]=='-')) {
+                return Character.toUpperCase(row[0]) + " wins";
+            }
+            // if no win and board is full its a tie
+            if (checkFull(grid) == true){
+                return "Tie";
             }
         };
+
 
         return result;
     }
