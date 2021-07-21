@@ -151,11 +151,17 @@ public class Game {
      * @return String indicating the outcome of the game: "X wins" or "O wins" or "Tie" or "None"
      */
     public char[] checkAxis(char [][]grid, int axis, int pos) {
-        char[] col;
+        char[] col = {'-', '-', '-'};
         if (axis == 0) {
             col = new char[]{grid[pos][0], grid[pos][1], grid[pos][2]};
-        } else {
+        } else if (axis == 1){
             col = new char[]{grid[0][pos], grid[1][pos], grid[2][pos]};
+        } else if (axis == 3){
+            // diagonal
+            col = new char[]{grid[0][0], grid[1][1], grid[2][2]};
+        } else if (axis == 4){
+            // diagonal
+            col = new char[]{grid[0][2], grid[1][1], grid[2][0]};
         }
         Arrays.sort(col);
         return col;
@@ -178,7 +184,7 @@ public class Game {
         } else {
             return false;
         }
-    }
+    };
 
     public String checkGameWinner(char [][]grid){
         int gridSize = grid.length;
@@ -198,6 +204,19 @@ public class Game {
             if (row[0] == row[2] && !(row[0]=='-')) {
                 return Character.toUpperCase(row[0]) + " wins";
             }
+            //check diagonal 1
+            char[] d1 = checkAxis(grid, 3, i);
+            // check if 1st and last are = and not '-'
+            if (d1[0] == d1[2] && !(d1[0]=='-')) {
+                return Character.toUpperCase(d1[0]) + " wins";
+            }
+            //check diagonal 2
+            char[] d2 = checkAxis(grid, 4, i);
+            // check if 1st and last are = and not '-'
+            if (d2[0] == d2[2] && !(d2[0]=='-')) {
+                return Character.toUpperCase(d2[0]) + " wins";
+            }
+
             // if no win and board is full its a tie
             if (checkFull(grid) == true){
                 return "Tie";
