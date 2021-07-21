@@ -151,6 +151,19 @@ public class Game {
     public String checkGameWinner(char [][]grid){
         String result = "None";
         //Student code goes here ...
+        //  loop columns to check for win
+        for(int i=0; i<3; i++){
+            char[] row = {grid[i][0], grid[i][1], grid[i][2]};
+            // sort row
+            Arrays.sort(row);
+            // check if 1st and last are = and not '-'
+            if (row[0] == row[2] && !(row[0]=='-')){
+                result = Character.toUpperCase(row[0]) + " wins";
+            }
+
+        }
+
+
         return result;
     }
 
